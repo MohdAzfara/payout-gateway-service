@@ -1,0 +1,28 @@
+{
+  "name": "payout-gateway-service",
+  "version": "1.0.0",
+  "description": "High-throughput microservice handling asynchronous vendor payouts, reconciliation, and balance tracking.",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "keywords": [
+    "fintech",
+    "payouts",
+    "microservice",
+    "reconciliation",
+    "banking",
+    "typescript"
+  ],
+  "author": "Mohd Azfar",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "pg": "^8.11.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@types/pg": "^8.11.0",
+    "typescript": "^5.3.3"
+  }
+}
