@@ -1,0 +1,49 @@
+openapi: 3.1.0
+info:
+  title: Payout Gateway Service API
+  version: 1.0.0
+  description: Enterprise asynchronous vendor payout orchestration, balance reservation, and reconciliation API.
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+paths:
+  /v1/payouts:
+    post:
+      summary: Dispatch an idempotent asynchronous vendor payout
+      operationId: createPayout
+      parameters:
+        - name: Idempotency-Key
+          in: header
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - recipientAccountId
+                - amountMinor
+                - currency
+              properties:
+                recipientAccountId:
+                  type: string
+                  example: "acct_vendor_99481"
+                amountMinor:
+                  type: integer
+                  minimum: 100
+                  example: 250000
+                currency:
+                  type: string
+                  enum: ["USD", "EUR", "GBP", "SGD"]
+      responses:
+        "202":
+          description: Payout instruction accepted and balance reserved in pending state.
+        "409":
+          description: Duplicate Idempotency-Key conflict with mismatched payload parameters.
+        "422":
+          description: Insufficient available platform balance or ineligible recipient account.
