@@ -1,30 +1,39 @@
-export interface JestCoverageThreshold {
-  readonly branches: number;
-  readonly functions: number;
-  readonly lines: number;
-  readonly statements: number;
-}
-
-export interface PayoutJestConfig {
-  readonly preset: string;
-  readonly testEnvironment: 'node';
-  readonly roots: readonly string[];
-  readonly testMatch: readonly string[];
-  readonly collectCoverageFrom: readonly string[];
-  readonly coverageThreshold: {
-    readonly global: JestCoverageThreshold;
-  };
-  readonly verbose: boolean;
-  readonly clearMocks: boolean;
-  readonly restoreMocks: boolean;
-}
-
-const config: PayoutJestConfig = {
+/**
+ * Enterprise Jest Test & Coverage Configuration — Payout Gateway Service
+ * Enforces deterministic verification across balance reservation, multi-rail routing,
+ * asynchronous worker backoff, and three-way settlement reconciliation modules.
+ *
+ * @type {import('jest').Config}
+ */
+module.exports = {
+  displayName: 'payout-gateway-service',
   preset: 'ts-jest',
   testEnvironment: 'node',
   roots: ['<rootDir>/src'],
-  testMatch: ['**/*.spec.ts', '**/*.test.ts'],
+  testMatch: [
+    '**/__tests__/**/*.+(ts|tsx)',
+    '**/?(*.)+(spec|test).+(ts|tsx)'
+  ],
+  transform: {
+    '^.+\\.tsx?$': [
+      'ts-jest',
+      {
+        tsconfig: 'tsconfig.json',
+        isolatedModules: true
+      }
+    ]
+  },
+  collectCoverage: true,
+  coverageDirectory: 'coverage',
+  coverageProvider: 'v8',
   collectCoverageFrom: [
+    'src/errors/**/*.ts',
+    'src/guards/**/*.ts',
+    'src/reconciliation/**/*.ts',
+    'src/routing/**/*.ts',
+    'src/security/**/*.ts',
+    'src/telemetry/**/*.ts',
+    'src/workers/**/*.ts',
     'src/**/*.ts',
     '!src/**/*.d.ts',
     '!src/index.ts'
@@ -37,9 +46,9 @@ const config: PayoutJestConfig = {
       statements: 95
     }
   },
-  verbose: true,
   clearMocks: true,
-  restoreMocks: true
+  restoreMocks: true,
+  resetMocks: true,
+  verbose: true,
+  testTimeout: 10000
 };
-
-export default config;
