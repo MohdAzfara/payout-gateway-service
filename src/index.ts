@@ -69,3 +69,8 @@ engine.executePayout({
   destinationAccount: 'acc_sub_987',
   idempotencyKey: 'idem_payout_abc123'
 }).then(res => console.log('Payout Result:', res));
+
+export * from './domain/payout-state-machine';
+export * from './concurrency/pessimistic-balance-lock';
+export * from './crypto/settlement-digest-sealer';
+export * from './ledger/payout-journal-emitter';
